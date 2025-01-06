@@ -18,45 +18,10 @@ int ans[4][4] = {
 bool editable[4][4];
 bool h,v,b;
 int cur_r = 0, cur_c = 0;
-void check_horizontal(int c,int cur_r) {
-    h=false;
-	for(int i=0;i<4;++i){
-    if(board[cur_r][i] ==c ){
-    h=true;    //如果橫排有一樣的數字，回傳true
-}
-else if(board[cur_r][i] !=c&& board[cur_r][i] !=0) h=false; //如果橫排沒有一樣的數字，而且完成橫排，回傳false
-}
-}
-
-void check_vertical(int c,int cur_r)
-{	v=false;
-	for(int i=0;i<4;++i){
-    if(board[i][cur_c] ==c ){
-    v=true;    //如果直排有一樣的數字，回傳true
-}
-else if(board[i][cur_c] !=c&& board[i][cur_c] !=0) v=false; //如果直排沒有一樣的數字，而且完成直排，回傳false
-}
-}
-
-void check_block(int c,int cur_r,int cur_c)
-{	b=false;
-	if(cur_r%2!=0) cur_r-=1;
-	 if(cur_c%2!=0) cur_c-=1;
-	 for(int i=0;i<2;++i){
- 		for(int j=0;j<2;++j)
-    if(board[cur_r+i][cur_c+j] ==c ){
-    	b=true;    //如果大格有一樣的數字，回傳true
-}
-}
-}
-
 void fill_number(int c)
 {
 if(editable[cur_r][cur_c]){ //如果 [cur_r][cur_c]可編輯
 board[cur_r][cur_c] =c;//把[cur_r][cur_c]變成c
-    check_horizontal(c,cur_r);//檢查有沒有重複的數字
-    check_vertical(c,cur_c);
-    check_block(c,cur_r,cur_c);
 }
 }
 string get_styled_text(string text, string style)
@@ -184,28 +149,30 @@ bool is_invalid(int i, int j) {
 
 
 bool is_done(int i, int j)
-{	int block_row_start = (i / 2) * 2;
-    int block_col_start = (j / 2) * 2;
-	int done[4][4]={false};	
-	if(h=false){
-		for (int col = 0; col < 4; ++col) {
-                done[i][col] = true; 
+{	int t_h=0,t_v=0,t_b=0;//計算行、列、大格的加總 
+    for (int l = 0; l < 4; ++l) {
+        t_h += board[i][l];
+		if (t_h == 10) {//如果行的加總等於10，回傳true 
+           	return true;
         }
-}
-	if(v=false){
-	for (int row = 0; row < 4; ++row) {
-                done[row][j] = true; 
-            }
-}
-	if (b=false) {
-            for (int row = block_row_start; row < block_row_start + 2; ++row) {
-                for (int col = block_col_start; col < block_col_start + 2; ++col) {
-                    done[row][col] = true;
+    }
+    for (int l = 0; l < 4; ++l) {
+        t_v += board[l][j];
+		if (t_v == 10) {//如果列的加總等於10，回傳true 
+           	return true;
+        }
+    }
+    /*if(i%2!=0) cur_r=i-1;
+	if(j%2!=0) cur_c=j-1;
+    for (int k = 0; k < 2; k += 1) { //如果大格的加總等於10，回傳true
+        for (int l = 0; l < 2; l += 1) {
+                    t_b += board[cur_r+k][cur_c+l];
+                    if(t_b==10) return true;
                 }
-            }
-   
-} return false;
+            }*/
+    return false;
 }
+
 
 bool check_win() {
     for (int i = 0; i < 4; ++i) {
@@ -266,7 +233,7 @@ void print_board()
     cout << get_styled_text("      0: ", "B") << "clear the cell" << endl;
     cout << get_styled_text("      Q: ", "B") << "quit" << endl;
     cout << get_styled_text("      Z: ", "B") << "quit and show me answer" << endl;
-    cout << endl;
+cout << endl;
 
     // Iterate through and print each cell.
     for (int i = 0; i < 4; ++i)
@@ -351,17 +318,17 @@ int main()
 
         if (c == 'Q' || c == 'q')
             break;
-		if (c == 'Z' || c == 'z'){
-			action_ok = true;
-			cout<<"answer:"<<endl;
-			for(int i=0;i<4;++i){
-				for(int j=0;j<4;++j){
-					cout<<ans[i][j]<<" ";
-				}
-				cout<<endl;
-			}
-			break;
-		}
+if (c == 'Z' || c == 'z'){
+action_ok = true;
+cout<<"answer:"<<endl;
+for(int i=0;i<4;++i){
+for(int j=0;j<4;++j){
+cout<<ans[i][j]<<" ";
+}
+cout<<endl;
+}
+break;
+}
         print_board();
 
         if (check_win())
@@ -376,4 +343,4 @@ int main()
 
     return 0;
 }
- 
+
