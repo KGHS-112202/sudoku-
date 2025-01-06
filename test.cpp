@@ -150,20 +150,23 @@ bool is_invalid(int i, int j) {
 
 bool is_done(int i, int j) {
     int t_h = 0, t_v = 0, t_b = 0;  // 計算行、列、大格的加總
+    bool h = false, v = false, b = false;  // 用來檢查行、列、大格中是否包含0
 
     // 檢查行的和
     for (int l = 0; l < 4; ++l) {
         t_h += board[i][l];
+        if (board[i][l] == 0) h = true;  // 如果行中有0，標記為true
     }
-    if (t_h == 10) {  // 如果行的加總等於10，回傳true
+    if (t_h == 10 && !h) {  // 如果行的加總等於10且行中沒有0，回傳true
         return true;
     }
 
     // 檢查列的和
     for (int l = 0; l < 4; ++l) {
         t_v += board[l][j];
+        if (board[l][j] == 0) v = true;  // 如果列中有0，標記為true
     }
-    if (t_v == 10) {  // 如果列的加總等於10，回傳true
+    if (t_v == 10 && !v) {  // 如果列的加總等於10且列中沒有0，回傳true
         return true;
     }
 
@@ -175,15 +178,17 @@ bool is_done(int i, int j) {
     for (int k = 0; k < 2; ++k) {  // 遍歷2x2大格中的每一行
         for (int l = 0; l < 2; ++l) {  // 遍歷2x2大格中的每一列
             t_b += board[cur_r + k][cur_c + l];
+            if (board[cur_r + k][cur_c + l] == 0) b = true;  // 如果大格中有0，標記為true
         }
     }
-    if (t_b == 10) {  // 如果大格的加總等於10，回傳true
+    if (t_b == 10 && !b) {  // 如果大格的加總等於10且大格中沒有0，回傳true
         return true;
     }
 
     // 如果都沒有滿足條件，返回 false
     return false;
 }
+
 
 
 
