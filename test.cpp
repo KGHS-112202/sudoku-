@@ -148,32 +148,43 @@ bool is_invalid(int i, int j) {
 }
 
 
-bool is_done(int i, int j)
-{	int t_h=0,t_v=0,t_b=0,cur_r=0,cur_c=0;//計算行、列、大格的加總 
+bool is_done(int i, int j) {
+    int t_h = 0, t_v = 0, t_b = 0;  // 計算行、列、大格的加總
+
+    // 檢查行的和
     for (int l = 0; l < 4; ++l) {
         t_h += board[i][l];
-		if (t_h == 10) {//如果行的加總等於10，回傳true 
-           	return true;
-        }
     }
+    if (t_h == 10) {  // 如果行的加總等於10，回傳true
+        return true;
+    }
+
+    // 檢查列的和
     for (int l = 0; l < 4; ++l) {
         t_v += board[l][j];
-		if (t_v == 10) {//如果列的加總等於10，回傳true 
-           	return true;
+    }
+    if (t_v == 10) {  // 如果列的加總等於10，回傳true
+        return true;
+    }
+
+    // 計算所在大格的起始位置
+    int cur_r = (i / 2) * 2;  // 確定大格的起始行
+    int cur_c = (j / 2) * 2;  // 確定大格的起始列
+
+    // 檢查大格的和 (2x2 區域)
+    for (int k = 0; k < 2; ++k) {  // 遍歷2x2大格中的每一行
+        for (int l = 0; l < 2; ++l) {  // 遍歷2x2大格中的每一列
+            t_b += board[cur_r + k][cur_c + l];
         }
     }
-    if(i%2!=0) cur_r=i-1;
-	if(j%2!=0) cur_c=j-1;
-    for (int k = 0; k < 2; ++k) { //如果大格的加總等於10，回傳true
-        for (int l = 0; l < 2;++l) {
-                    t_b += board[cur_r+k][cur_c+l];
-                    if(t_b==10){
-						return true;
-					} 
-                }
-            }
+    if (t_b == 10) {  // 如果大格的加總等於10，回傳true
+        return true;
+    }
+
+    // 如果都沒有滿足條件，返回 false
     return false;
 }
+
 
 
 bool check_win() {
