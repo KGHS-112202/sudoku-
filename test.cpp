@@ -149,7 +149,7 @@ bool is_invalid(int i, int j) {
 
 
 bool is_done(int i, int j)
-{	int t_h=0,t_v=0,t_b=0;//計算行、列、大格的加總 
+{	int t_h=0,t_v=0,t_b=0,cur_r=0,cur_c=0;//計算行、列、大格的加總 
     for (int l = 0; l < 4; ++l) {
         t_h += board[i][l];
 		if (t_h == 10) {//如果行的加總等於10，回傳true 
@@ -162,14 +162,16 @@ bool is_done(int i, int j)
            	return true;
         }
     }
-    /*if(i%2!=0) cur_r=i-1;
+    if(i%2!=0) cur_r=i-1;
 	if(j%2!=0) cur_c=j-1;
-    for (int k = 0; k < 2; k += 1) { //如果大格的加總等於10，回傳true
-        for (int l = 0; l < 2; l += 1) {
+    for (int k = 0; k < 2; ++k) { //如果大格的加總等於10，回傳true
+        for (int l = 0; l < 2;++l) {
                     t_b += board[cur_r+k][cur_c+l];
-                    if(t_b==10) return true;
+                    if(t_b==10){
+						return true;
+					} 
                 }
-            }*/
+            }
     return false;
 }
 
