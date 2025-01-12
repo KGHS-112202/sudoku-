@@ -93,7 +93,7 @@ bool is_invalid(int i, int j) {
     // 檢查橫排是否有衝突
     for (int col = 0; col < 4; ++col) {
         if (col != j && board[i][col] == c) {
-            row_conflict = true;
+            col_conflict = true;
             break;
         }
     }
@@ -101,14 +101,14 @@ bool is_invalid(int i, int j) {
     // 檢查直排是否有衝突
     for (int row = 0; row < 4; ++row) {
         if (row != i && board[row][j] == c) {
-            col_conflict = true;
+            row_conflict = true;
             break;
         }
     }
 
     // 檢查大格是否有衝突
-    int block_row_start = (i / 2) * 2;
-    int block_col_start = (j / 2) * 2;
+    int block_row_start = (i / 2) * 2;// 確定大格的起始行，i=0 -> 0/2=0 -> 0*2=0，i=1 -> 1/2=0 -> 0*2=0
+    int block_col_start = (j / 2) * 2;// 確定大格的起始列，i=2-> 2/2=1 -> 1*2=2，i=3 -> 3/2=1 -> 1*2=2 
     for (int row = block_row_start; row < block_row_start + 2; ++row) {
         for (int col = block_col_start; col < block_col_start + 2; ++col) {
             if ((row != i || col != j) && board[row][col] == c) {
@@ -123,7 +123,7 @@ bool is_invalid(int i, int j) {
         // 如果有橫排衝突
         if (row_conflict) {
             for (int col = 0; col < 4; ++col) {
-                conflict[i][col] = true; // 假設 conflict 是一個 2D 陣列，記錄衝突
+                conflict[i][col] = true; // 假設 conflict 是一個陣列，記錄衝突
             }
         }
         // 如果有直排衝突
@@ -140,7 +140,7 @@ bool is_invalid(int i, int j) {
                 }
             }
         }
-        return true; // 有衝突
+        return true; // 有衝突，回傳 true 
     }
 
     return false; // 無衝突
@@ -154,7 +154,7 @@ bool is_done(int i, int j) {
     // 檢查行的和
     for (int l = 0; l < 4; ++l) {
         t_h += board[i][l];
-        if (board[i][l] == 0) h = true;  // 如果行中有0，標記為true
+        if (board[i][l] == 0) h = true;  // 如果行中有0，h標記為true
     }
     if (t_h == 10 && !h) {  // 如果行的加總等於10且行中沒有0，回傳true
         return true;
@@ -163,21 +163,21 @@ bool is_done(int i, int j) {
     // 檢查列的和
     for (int l = 0; l < 4; ++l) {
         t_v += board[l][j];
-        if (board[l][j] == 0) v = true;  // 如果列中有0，標記為true
+        if (board[l][j] == 0) v = true;  // 如果列中有0，v標記為true
     }
     if (t_v == 10 && !v) {  // 如果列的加總等於10且列中沒有0，回傳true
         return true;
     }
 
     // 計算所在大格的起始位置
-    int cur_r = (i / 2) * 2;  // 確定大格的起始行，i=1 -> 1/2=0 -> 0*2=0 
-    int cur_c = (j / 2) * 2;  // 確定大格的起始列，i=3 -> 3/2=1 -> 1*2=2 
+    int cur_r = (i / 2) * 2;  // 確定大格的起始行，i=0 -> 0/2=0 -> 0*2=0，i=1 -> 1/2=0 -> 0*2=0 
+    int cur_c = (j / 2) * 2;  // 確定大格的起始列，i=2 -> 2/2=1 -> 1*2=2，i=3 -> 3/2=1 -> 1*2=2 
 
     // 檢查大格的和 (2x2 區域)
     for (int k = 0; k < 2; ++k) {  // 遍歷2x2大格中的每一行
         for (int l = 0; l < 2; ++l) {  // 遍歷2x2大格中的每一列
             t_b += board[cur_r + k][cur_c + l];
-            if (board[cur_r + k][cur_c + l] == 0) b = true;  // 如果大格中有0，標記為true
+            if (board[cur_r + k][cur_c + l] == 0) b = true;  // 如果大格中有0，b標記為true
         }
     }
     if (t_b == 10 && !b) {  // 如果大格的加總等於10且大格中沒有0，回傳true
