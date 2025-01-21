@@ -83,11 +83,11 @@ void move_cursor(char c)
     cur_r = target_r;
     cur_c = target_c;
 }
-
+bool conflict[4][4]={false};
 bool is_invalid(int i, int j) {
     int c = board[i][j]; // 當前位置的數字
     if (c == 0) return false; // 如果該位置是空的，不存在衝突
-	bool conflict[4][4]={false};
+	
     bool row_conflict = false, col_conflict = false, block_conflict = false;
 
     // 檢查橫排是否有衝突
